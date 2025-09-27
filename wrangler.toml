@@ -1,0 +1,28 @@
+name = "kenflynn-portfolio-main-site"
+compatibility_date = "2024-09-27"
+compatibility_flags = ["nodejs_compat"]
+
+[env.production]
+name = "kenflynn-portfolio-main-site"
+routes = [
+  { pattern = "kenflynn.dev", custom_domain = true },
+  { pattern = "www.kenflynn.dev", custom_domain = true }
+]
+
+[env.staging]
+name = "kenflynn-portfolio-main-site-staging"
+routes = [
+  { pattern = "staging.kenflynn.dev", custom_domain = true }
+]
+
+# Pages configuration
+pages_build_output_dir = ".svelte-kit/output/client"
+
+# Environment variables (secrets should be set via wrangler secret put)
+[vars]
+NODE_ENV = "production"
+
+# Analytics and monitoring
+# analytics_engine_datasets = []  # Can be configured later for usage analytics
+
+# Custom headers for security will be configured via Cloudflare dashboard or _headers file
