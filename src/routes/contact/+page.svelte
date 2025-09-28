@@ -1,10 +1,18 @@
-<svelte:head>
-  <title>Contact - Ken Flynn</title>
-  <meta
-    name="description"
-    content="Get in touch with Ken Flynn for data engineering opportunities and collaborations."
-  />
-</svelte:head>
+<script lang="ts">
+  import { enhance } from '$app/forms';
+  import { SEO } from '$lib/components';
+  import type { ActionData } from './$types';
+
+  export let form: ActionData;
+
+  let loading = false;
+</script>
+
+<SEO
+  title="Contact Ken Flynn - Data Science Engineer"
+  description="Get in touch with Ken Flynn for data engineering opportunities, collaborations, or to discuss data science projects. Lead Data Science Engineer at Cybrary available for consulting."
+  keywords={['Contact Ken Flynn', 'Data Science Consulting', 'Data Engineering Services', 'Hire Data Scientist', 'Cybrary Engineer Contact', 'Data Science Collaboration', 'Technical Consulting']}
+/>
 
 <div class="container section-padding">
   <div class="max-w-4xl mx-auto">
@@ -38,7 +46,11 @@
             </div>
             <div>
               <p class="text-sm font-medium text-gray-900 dark:text-white">Email</p>
-              <p class="text-sm text-muted">hello@kenflynn.dev</p>
+              <p class="text-sm text-muted">
+                <a href="mailto:hello@kenflynn.dev" class="hover:text-primary-600 transition-colors">
+                  hello@kenflynn.dev
+                </a>
+              </p>
             </div>
           </div>
 
@@ -52,7 +64,11 @@
             </div>
             <div>
               <p class="text-sm font-medium text-gray-900 dark:text-white">GitHub</p>
-              <p class="text-sm text-muted">github.com/kenflynn</p>
+              <p class="text-sm text-muted">
+                <a href="https://github.com/kenflynn" target="_blank" rel="noopener noreferrer" class="hover:text-primary-600 transition-colors">
+                  github.com/kenflynn
+                </a>
+              </p>
             </div>
           </div>
 
@@ -66,7 +82,11 @@
             </div>
             <div>
               <p class="text-sm font-medium text-gray-900 dark:text-white">LinkedIn</p>
-              <p class="text-sm text-muted">linkedin.com/in/kenflynn</p>
+              <p class="text-sm text-muted">
+                <a href="https://www.linkedin.com/in/kmflynn5" target="_blank" rel="noopener noreferrer" class="hover:text-primary-600 transition-colors">
+                  linkedin.com/in/kmflynn5
+                </a>
+              </p>
             </div>
           </div>
         </div>
@@ -75,73 +95,118 @@
       <!-- Contact Form -->
       <div class="card">
         <h2 class="card-title">Send a Message</h2>
-        <form class="space-y-4">
-          <div>
-            <label
-              for="name"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            >
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-              required
-            />
-          </div>
 
-          <div>
-            <label
-              for="email"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-              required
-            />
+        {#if form?.success}
+          <div class="mb-4 p-4 bg-green-100 dark:bg-green-900 border border-green-300 dark:border-green-700 rounded">
+            <p class="text-green-800 dark:text-green-200">{form.message}</p>
           </div>
+        {:else}
+          {#if form?.errors?.general}
+            <div class="mb-4 p-4 bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-700 rounded">
+              <p class="text-red-800 dark:text-red-200">{form.errors.general}</p>
+            </div>
+          {/if}
 
-          <div>
-            <label
-              for="subject"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          <form
+            method="POST"
+            class="space-y-4"
+            novalidate
+            use:enhance={({ submitter, cancel }) => {
+              loading = true;
+              return async ({ result, update }) => {
+                loading = false;
+                await update();
+              };
+            }}
+          >
+            <div>
+              <label
+                for="name"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                Name *
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={form?.name || ''}
+                class="w-full px-3 py-2 border {form?.errors?.name ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                required
+              />
+              {#if form?.errors?.name}
+                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{form.errors.name}</p>
+              {/if}
+            </div>
+
+            <div>
+              <label
+                for="email"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                Email *
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={form?.email || ''}
+                class="w-full px-3 py-2 border {form?.errors?.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                required
+              />
+              {#if form?.errors?.email}
+                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{form.errors.email}</p>
+              {/if}
+            </div>
+
+            <div>
+              <label
+                for="subject"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                Subject *
+              </label>
+              <input
+                type="text"
+                id="subject"
+                name="subject"
+                value={form?.subject || ''}
+                class="w-full px-3 py-2 border {form?.errors?.subject ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                required
+              />
+              {#if form?.errors?.subject}
+                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{form.errors.subject}</p>
+              {/if}
+            </div>
+
+            <div>
+              <label
+                for="message"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                Message *
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows="4"
+                class="w-full px-3 py-2 border {form?.errors?.message ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                required
+              >{form?.message || ''}</textarea>
+              {#if form?.errors?.message}
+                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{form.errors.message}</p>
+              {/if}
+            </div>
+
+            <button
+              type="submit"
+              class="w-full btn btn-primary"
+              disabled={loading}
             >
-              Subject
-            </label>
-            <input
-              type="text"
-              id="subject"
-              name="subject"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-              required
-            />
-          </div>
-
-          <div>
-            <label
-              for="message"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            >
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows="4"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-              required
-            ></textarea>
-          </div>
-
-          <button type="submit" class="w-full btn btn-primary"> Send Message </button>
-        </form>
+              {loading ? 'Sending...' : 'Send Message'}
+            </button>
+          </form>
+        {/if}
       </div>
     </div>
   </div>

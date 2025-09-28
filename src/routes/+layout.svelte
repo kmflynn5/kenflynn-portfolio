@@ -2,6 +2,7 @@
   import '../app.css';
   import favicon from '$lib/assets/favicon.svg';
   import { page } from '$app/stores';
+  import { SEO } from '$lib/components';
 
   let { children } = $props();
 
@@ -13,14 +14,16 @@
   ];
 </script>
 
+<!-- Default SEO - pages can override -->
+<SEO />
+
 <svelte:head>
   <link rel="icon" href={favicon} />
-  <title>Ken Flynn - Data Engineer Portfolio</title>
-  <meta
-    name="description"
-    content="Ken Flynn's data engineering portfolio showcasing projects, skills, and experience."
-  />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Performance optimizations -->
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="//fonts.gstatic.com" />
 </svelte:head>
 
 <div class="min-h-screen bg-white dark:bg-gray-900 flex flex-col">
@@ -39,7 +42,7 @@
             {#each navigation as item}
               <a
                 href={item.href}
-                class={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                class={`px-3 py-2 rounded text-sm font-medium transition-colors ${
                   $page.url.pathname === item.href
                     ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
                     : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
@@ -55,7 +58,7 @@
         <div class="md:hidden">
           <button
             type="button"
-            class="bg-gray-200 dark:bg-gray-700 inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+            class="bg-gray-200 dark:bg-gray-700 inline-flex items-center justify-center p-2 rounded text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
             aria-expanded="false"
           >
             <span class="sr-only">Open main menu</span>
